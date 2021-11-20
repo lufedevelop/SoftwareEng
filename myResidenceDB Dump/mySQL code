@@ -1,15 +1,20 @@
+Milestone 2: Basic Prototype Database Code
+- Matthew Richard | Student ID: 1102930 -
+
+//creates the residences relation
 CREATE TABLE residences (
-	residence_ID		INTEGER NOT NULL,
-    student_usernames	VARCHAR(255),
+    residence_ID		INTEGER NOT NULL,
+    student_usernames		VARCHAR(255),
     living_style		VARCHAR(255)	CHECK(living_style = "Residence Hall" or living_style = "Apartment" or living_style = "Townhouse"),
     room_type			VARCHAR(225)	CHECK(room_type = "Double" or room_type = "Basic Single" or room_type = "Single"),
-	price				INTEGER NOT NULL,
+    price			INTEGER NOT NULL,
     PRIMARY KEY (residence_ID)
     );
 
+//creates the student relation
 CREATE TABLE student (
-	student_username	CHAR(8)	NOT NULL,
-    student_password	VARCHAR(255) NOT NULL,
+    student_username		CHAR(8)	NOT NULL,
+    student_password		VARCHAR(255) NOT NULL,
     student_email		CHAR(21) NOT NULL,
     student_name		VARCHAR(255) NOT NULL,
     year_num			INTEGER NOT NULL,
@@ -20,19 +25,19 @@ CREATE TABLE student (
 		ON UPDATE CASCADE ON DELETE NO ACTION
     );
     
+//creates the manager relation
 CREATE TABLE manager (
-	manager_username	CHAR(8)	NOT NULL,
-    manager_password	VARCHAR(255) NOT NULL,
+    manager_username		CHAR(8)	NOT NULL,
+    manager_password		VARCHAR(255) NOT NULL,
     manager_email		CHAR(21) NOT NULL,
     manager_name		VARCHAR(255) NOT NULL,
     PRIMARY KEY (manager_username)
     );
 
-
-
-
+//insert dummy values into the student to use as an example in the prototype
 INSERT INTO student (student_username, student_password, student_email, student_name, year_num, residence_ID, meal_plan)
 VALUES ('jlhoward', 'password', 'jlhoward@lakeheadu.ca', 'Jeffery Howard', 3 , NULL, 1);
 
+//insert dummy values into the manager to use as an example in the prototype
 INSERT INTO manager (manager_username, manager_password, manager_email, manager_name)
 VALUES ('mjrichar', 'mpassword', 'mjrichar@lakeheadu.ca', 'Matthew Richard');
