@@ -128,6 +128,18 @@ public class Main extends Application {
                         // USE THIS FUNCTION CALL FOR SUCCESSFUL MANAGER LOGIN -> setManager(managerRoot,primaryStage);
                 // if entered credentials DO NOT equal some credentials in database
                     // errorMessageField.setText("Incorrect Credentials");
+				MysqlCon con = new MysqlCon();
+                String result = con.check_user(displayUserName.getText(), displayPassWord.getText());
+                System.out.println(result);
+                if (result == "isStudent"){
+                    setStudent(studentRoot,primaryStage);
+                }
+                else if (result == "isManager"){
+                    setManager(managerRoot,primaryStage);
+                }
+                else{
+                    errorMessageField.setText("Incorrect Credentials");
+                }
             } // end if
         }); // end setOnAction
     } // end function start
