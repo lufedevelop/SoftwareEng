@@ -17,9 +17,10 @@ import javafx.stage.Stage;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.sql.SQLException;
+
 // public class Main extends Application
 public class Main extends Application {
-    static SearchRoom searchRoom = new SearchRoom();
     static StudentHub studentHub = new StudentHub();
     static ManagerHub managerHub = new ManagerHub();
 
@@ -116,16 +117,6 @@ public class Main extends Application {
         login.setOnAction(e -> {
             // if both text fields are empty
             if ((displayUserName.getText().equals("")) && (displayPassWord.getText().equals(""))) {
-
-                // Temporary bypass login
-                try {
-                    managerHub.start(primaryStage);
-                }
-                catch (Exception err) {
-                    System.out.println(err);
-                }
-
-
                 // displays that both requirements are missing to the user
                 errorMessageField.setText("Missing Username & Password");
             } // end if
@@ -141,59 +132,29 @@ public class Main extends Application {
             } // end if
             // if both of the fields are not empty
             if ((displayUserName.getText() != "") && (displayPassWord.getText() != "")) {
-                // Temporary bypass login
+                //create Driver Object and verify entered username and password
+                Driver new_driver = new Driver();
                 try {
-                    searchRoom.start(primaryStage);
+                    DBStudent new_student = new_driver.isStudent(displayUserName.getText(), displayPassWord.getText());
+                    DBManager new_manager = new_driver.isManager(displayUserName.getText(), displayPassWord.getText());
+                    //if student open student start page
+                    if (new_student != null){
+                        studentHub.start(primaryStage);
+                    }
+                    //if manager open manager start page
+                    else if (new_manager != null){
+                        managerHub.start(primaryStage);
+                    }
+                    else{
+                        errorMessageField.setText("Incorrect Credentials");
+                    }
                 }
-                catch (Exception err) {
-                    System.out.println(err);
+                catch (Exception ex){
+                    ex.printStackTrace();
                 }
-                System.out.println("login");
-
-                //
-                    // if entered credentials equal some credentials in database
-                        // complete login (function call)
-                        // if student, setStudent()
-                        // USE THIS FUNCTION CALL FOR SUCCESSFUL STUDENT LOGIN -> setStudent(studentRoot,primaryStage);
-                        // if manager, setManager()
-                        // USE THIS FUNCTION CALL FOR SUCCESSFUL MANAGER LOGIN -> setManager(managerRoot,primaryStage);
-                // if entered credentials DO NOT equal some credentials in database
-                    // errorMessageField.setText("Incorrect Credentials");
             } // end if
         }); // end setOnAction
     } // end function start
-
-    // function void setStudent includes the flow pane and stage arguments
-    public void setStudent(FlowPane studentPane, Stage studentStage) {
-        // title for window
-        studentStage.setTitle("myResidence: STUDENT");
-        // window width
-        studentStage.setWidth(600);
-        // window height
-        studentStage.setHeight(500);
-        // student scene declaration
-        Scene studentScene = new Scene(studentPane, 300, 300);
-        // setting scene for student instance
-        studentStage.setScene(studentScene);
-        // showing student scene
-        studentStage.show();
-    } // end of function setStudent
-
-    // function void setManager includes the flow pane and stage arguments
-    public void setManager(FlowPane managerPane, Stage managerStage) {
-        // title for window
-        managerStage.setTitle("myResidence: MANAGER");
-        // window width
-        managerStage.setWidth(600);
-        // window height
-        managerStage.setHeight(500);
-        // manager scene declaration
-        Scene managerScene = new Scene(managerPane, 300, 250);
-        // setting scene for manager instance
-        managerStage.setScene(managerScene);
-        // showing manager scene
-        managerStage.show();
-    } // end of function setManager
 
     // static function main launches arguments
     public static void main(String[] args) {

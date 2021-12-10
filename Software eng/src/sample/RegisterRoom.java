@@ -31,7 +31,21 @@ public class RegisterRoom extends Application{
         // displayActions = "Registration Successful / Complete" -- Green text
         Button registerIdInputButton = new Button("REGISTER");
         registerIdInputButton.setOnAction(e -> {
+            Driver new_driver = new Driver();
+            try {
+                boolean isAdded = new_driver.addStudentToRoom("lfederle", 1002);
+                if (isAdded){
+                    //user is added
 
+                }
+                else {
+                    //room not available
+
+                }
+            }
+            catch (Exception ex){
+                ex.printStackTrace();
+            }
         });
 
         Button goBackButton = new Button("BACK TO HUB");

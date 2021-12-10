@@ -24,8 +24,7 @@ public class StudentHub extends Application {
 
         VBox stageStuSet = new VBox();
         VBox studentPermissions = new VBox();
-
-        Label welcomeStu = new Label("\t            Welcome" + "     [PLACEHOLDER]"); // Add first name of manager from database
+        Label welcomeStu = new Label("\t            Welcome" + "     [PLACEHOLDER]"); // Add first name of student from database
         welcomeStu.setFont(new Font("Helvetica", 12));
         Label selectServ = new Label("\tSelect a Feature:");
         selectServ.setFont(new Font("Helvetica", 24));

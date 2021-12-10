@@ -162,8 +162,15 @@ public class SearchRoom extends Application {
         // ex. show 0-2, 3-5, 6-8, etc.
         Button searchInputButton = new Button("SEARCH");
         searchInputButton.setOnAction(e -> {
-            // Get search results from database as string
-            //
+            // Get search results from database as object
+            Driver new_driver = new Driver();
+            try {
+                DBResidence new_residence = new_driver.isResidence("Single");
+            }
+            catch (Exception ex){
+                ex.printStackTrace();
+            }
+
         });
 
         Button next = new Button("NEXT SEARCH");

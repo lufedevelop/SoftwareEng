@@ -26,6 +26,9 @@ public class AddRoom extends Application {
         Label addSpec = new Label("Enter New Room ID:");
         TextField addIDInput = new TextField();
         Label addMessage = new Label("");
+        // we also need int residence_ID, String living_style, String room_type,
+        //                                  int residence_price,String residence_address,
+        //                                  boolean has_mealplan, String student_usernames
         // set on action
         // if new room ID matches another existing room ID
         // addMessage = "Room already exists!" -- red text
@@ -33,6 +36,21 @@ public class AddRoom extends Application {
         // addMessage = "please enter an ID to assign to room!"
         // else
         // addMessage = "Room successfully added" -- green text
+        Driver new_driver = new Driver();
+        try {
+            boolean isAdded = new_driver.addRoom();
+            if (isAdded){
+                //room is added
+
+            }
+            else {
+                //room is not added
+
+            }
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
         Button addRoom = new Button("ADD ROOM");
         Label subServ = new Label("Remove a Room");
         Label subSpec = new Label("Enter a Valid Room ID:");
@@ -46,6 +64,20 @@ public class AddRoom extends Application {
         // subMessage = "Room cannot be removed until it is empty!" -- red text
         // else
         // subMessage = "Room successfully removed" -- green text
+        try {
+            boolean isRemoved = new_driver.deleteRoom(0000);
+            if (isRemoved){
+                //room is removed
+
+            }
+            else {
+                //room is not removed
+
+            }
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
         Button subRoom = new Button("REMOVE ROOM");
 
         Button goBackButton = new Button("BACK TO HUB");
