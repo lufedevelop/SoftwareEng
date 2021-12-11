@@ -10,6 +10,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import java.util.ArrayList;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -17,8 +18,10 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class SearchRoom extends Application {
+    int index = 0;
     @Override
     public void start(Stage primaryStage) throws Exception{
+
         VBox searchRoomPermissions = new VBox();
         HBox nextRet = new HBox();
 
@@ -26,130 +29,7 @@ public class SearchRoom extends Application {
 
         TextField inputSearch = new TextField();
 
-        List<Label> searchQueue = new List<Label>() {
-            @Override
-            public int size() {
-                return 0;
-                // size equals to number of queries found
-            }
-
-            @Override
-            public boolean isEmpty() {
-                // if number of queries > 0
-                return false;
-                // if number of queries == 0
-                // return true
-            }
-
-            @Override
-            public boolean contains(Object o) {
-                return false;
-            }
-
-            @Override
-            public Iterator<Label> iterator() {
-                return null;
-            }
-
-            @Override
-            public Object[] toArray() {
-                return new Object[0];
-            }
-
-            @Override
-            public <T> T[] toArray(T[] a) {
-                return null;
-            }
-
-            @Override
-            public boolean add(Label label) {
-                return false;
-            }
-
-            @Override
-            public boolean remove(Object o) {
-                return false;
-            }
-
-            @Override
-            public boolean containsAll(Collection<?> c) {
-                return false;
-            }
-
-            @Override
-            public boolean addAll(Collection<? extends Label> c) {
-                return false;
-            }
-
-            @Override
-            public boolean addAll(int index, Collection<? extends Label> c) {
-                return false;
-            }
-
-            @Override
-            public boolean removeAll(Collection<?> c) {
-                return false;
-            }
-
-            @Override
-            public boolean retainAll(Collection<?> c) {
-                return false;
-            }
-
-            @Override
-            public void clear() {
-
-            }
-
-            @Override
-            public Label get(int index) {
-                // return alike variables within database
-                return null;
-            }
-
-            @Override
-            public Label set(int index, Label element) {
-                return null;
-            }
-
-            @Override
-            public void add(int index, Label element) {
-
-            }
-
-            @Override
-            public Label remove(int index) {
-                return null;
-            }
-
-            @Override
-            public int indexOf(Object o) {
-                return 0;
-            }
-
-            @Override
-            public int lastIndexOf(Object o) {
-                return 0;
-            }
-
-            @Override
-            public ListIterator<Label> listIterator() {
-                return null;
-            }
-
-            @Override
-            public ListIterator<Label> listIterator(int index) {
-                return null;
-            }
-
-            @Override
-            public List<Label> subList(int fromIndex, int toIndex) {
-                return null;
-            }
-        };
-        Label inputSearchCheckX = new Label("");
-        Label inputSearchCheckY = new Label("");
-        Label inputSearchCheckZ = new Label("");
+        Label[] searchOutput = {new Label(""), new Label(""), new Label("")};
         // set on action for search
         // if term does not exist within database
         // return message = "Search does not match any results!"
@@ -188,13 +68,16 @@ public class SearchRoom extends Application {
         });
 
         Button next = new Button("NEXT SEARCH");
-        // increments search indexes by next 3 inputs
-        // if number of inputs is reached
-        // stop
+        next.setOnAction(e -> {
+            index++;
+        });
         Button previous = new Button("PREVIOUS SEARCH");
-        // decrements search indexes by last 3 inputs
-        // if input x = 0
-        // stop
+        previous.setOnAction(e -> {
+            index--;
+            if (index < 0) {
+                index = 0;
+            }
+        });
         Button goBackButton = new Button("BACK TO HUB");
         goBackButton.setOnAction(e -> {
             if (Utils.privilege == "Student") {
@@ -214,7 +97,7 @@ public class SearchRoom extends Application {
         });
 
         nextRet.getChildren().addAll(next, previous);
-        searchRoomPermissions.getChildren().addAll(searchServ,inputSearch, inputSearchCheckX, inputSearchCheckY, inputSearchCheckZ, searchInputButton, nextRet, goBackButton);
+        searchRoomPermissions.getChildren().addAll(searchServ,inputSearch, searchOutput[0], searchOutput[1], searchOutput[3], searchInputButton, nextRet, goBackButton);
         searchRoomPermissions.setSpacing(15);
 
         FlowPane searchHub = new FlowPane();
