@@ -12,11 +12,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-
 public class SearchRoom extends Application {
     int index = 0;
     @Override
@@ -29,7 +24,7 @@ public class SearchRoom extends Application {
 
         TextField inputSearch = new TextField();
 
-        Label[] searchOutput = {new Label(""), new Label(""), new Label("")};
+        Label[] searchOutput = {new Label("Spot 1"), new Label("Spot 2"), new Label("Spot 3")};
         // set on action for search
         // if term does not exist within database
         // return message = "Search does not match any results!"
@@ -40,6 +35,7 @@ public class SearchRoom extends Application {
         // ex. show 0-2, 3-5, 6-8, etc.
         Button searchInputButton = new Button("SEARCH");
         searchInputButton.setOnAction(e -> {
+            System.out.println("Search pressed");
             String keyword = inputSearch.getText();
 
             // Get search results from database as object
@@ -48,17 +44,18 @@ public class SearchRoom extends Application {
                 DBResidence room;
 
                 for (var i = 0; i < 3; ++i) {
-                    if (i + index > rooms.size()) {
-                        room = rooms.get(i + index);
+                    System.out.println(i + ": ");
+                    try {
+                        room = rooms.get(i);
                     }
-                    else {
-
+                    catch (Exception err) {
+                        System.out.println(err);
                         return;
                     }
                     searchOutput[i].setText(
                             "Room: " + room.getID() +
-                                    "\nStyle: " + room.getStyle() +
-                                    "\nPrice: " + room.getPrice()
+                            "\nStyle: " + room.getStyle() +
+                            "\nPrice: " + room.getPrice()
                     );
                 }
             }
