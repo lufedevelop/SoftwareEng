@@ -14,6 +14,9 @@ import java.util.ArrayList;
 
 public class SearchRoom extends Application {
     int index = 0;
+    ArrayList<DBResidence> rooms;
+    Label[] searchOutput = {new Label(""), new Label(""), new Label("")};
+
     @Override
     public void start(Stage primaryStage) throws Exception{
 
@@ -23,8 +26,6 @@ public class SearchRoom extends Application {
         Label searchServ = new Label("Enter a keyword / RoomID / etc");
 
         TextField inputSearch = new TextField();
-
-        Label[] searchOutput = {new Label("Spot 1"), new Label("Spot 2"), new Label("Spot 3")};
         // set on action for search
         // if term does not exist within database
         // return message = "Search does not match any results!"
@@ -40,24 +41,8 @@ public class SearchRoom extends Application {
 
             // Get search results from database as object
             try {
-                ArrayList<DBResidence> rooms = Driver.isResidence(keyword);
-                DBResidence room;
-
-                for (var i = 0; i < 3; ++i) {
-                    System.out.println(i + ": ");
-                    try {
-                        room = rooms.get(i);
-                    }
-                    catch (Exception err) {
-                        System.out.println(err);
-                        return;
-                    }
-                    searchOutput[i].setText(
-                            "Room: " + room.getID() +
-                            "\nStyle: " + room.getStyle() +
-                            "\nPrice: " + room.getPrice()
-                    );
-                }
+                rooms = Driver.isResidence(keyword);
+                updateDisplay();
             }
             catch (Exception ex){
                 ex.printStackTrace();
@@ -67,6 +52,12 @@ public class SearchRoom extends Application {
         Button next = new Button("NEXT SEARCH");
         next.setOnAction(e -> {
             index++;
+            if (index > rooms.size() - 3) {
+                index = rooms.size() - 3;
+                if (index < 0)
+                    index = 0;
+            }
+            updateDisplay();
         });
         Button previous = new Button("PREVIOUS SEARCH");
         previous.setOnAction(e -> {
@@ -74,7 +65,9 @@ public class SearchRoom extends Application {
             if (index < 0) {
                 index = 0;
             }
+            updateDisplay();
         });
+
         Button goBackButton = new Button("BACK TO HUB");
         goBackButton.setOnAction(e -> {
             if (Utils.privilege == "Student") {
@@ -104,5 +97,25 @@ public class SearchRoom extends Application {
         Scene searchHubScreen = new Scene(searchHub);
         primaryStage.setScene(searchHubScreen);
         primaryStage.show();
+    }
+
+    private void updateDisplay() {
+        DBResidence room;
+
+        for (var i = 0; i < 3; ++i) {
+            try {
+                room = rooms.get(index + i);
+            }
+            catch (Exception ex) {
+                searchOutput[i].setText("");
+                return;
+            }
+            searchOutput[i].setText(
+                    "Room ID: " + room.getID() +
+                            "\nStyle: " + room.getStyle() +
+                            "\nPrice: " + room.getPrice() +
+                            "\n" + (room.getMealplan() ? "Includes meal plan." : "Does not include meal plan.")
+            );
+        }
     }
 }
