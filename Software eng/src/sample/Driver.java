@@ -1,7 +1,9 @@
 package sample;
 
+
 import java.sql.*;
 import java.util.ArrayList;
+import org.apache.commons.lang3.StringUtils;
 
 public class Driver {
     //check if the user is a student in the db
@@ -110,12 +112,22 @@ public class Driver {
                                 residence_address_DB, has_mealplan_DB, student_usernames_DB));
                     }
                 }
-                else if (residence_ID_DB.equals(keyword) || living_style_DB.equals(keyword) ||
-                        room_type_DB.equals(keyword) || residence_price_DB.equals(keyword) ||
-                        residence_address_DB.equals(keyword)){
+                else if (StringUtils.isNumeric(keyword)){
+                    Integer intKeyword = Integer.parseInt(keyword);
+                    if (residence_price_DB==intKeyword || residence_ID_DB==intKeyword){
+                        System.out.println("room for keyword "+keyword+" found");
+                        rooms.add(new DBResidence(residence_ID_DB, living_style_DB, room_type_DB, residence_price_DB,
+                                residence_address_DB, has_mealplan_DB, student_usernames_DB));
+                    }
+                }
+                else if (residence_address_DB.equals(keyword) || living_style_DB.equals(keyword) ||
+                        room_type_DB.equals(keyword)){
                     System.out.println("room for keyword "+keyword+" found");
                     rooms.add(new DBResidence(residence_ID_DB, living_style_DB, room_type_DB, residence_price_DB,
                             residence_address_DB, has_mealplan_DB, student_usernames_DB));
+                }
+                else {
+                    System.out.println("no room for keyword " +keyword+" found");
                 }
             }
             return rooms;
@@ -123,7 +135,6 @@ public class Driver {
         catch (Exception exc) {
             exc.printStackTrace();
         }
-        System.out.println("no room for keyword" +keyword+" found");
         return null;
     }
     //add a student to a room in the db

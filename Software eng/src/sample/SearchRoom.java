@@ -97,7 +97,7 @@ public class SearchRoom extends Application {
         });
 
         nextRet.getChildren().addAll(next, previous);
-        searchRoomPermissions.getChildren().addAll(searchServ,inputSearch, searchOutput[0], searchOutput[1], searchOutput[3], searchInputButton, nextRet, goBackButton);
+        searchRoomPermissions.getChildren().addAll(searchServ,inputSearch, searchOutput[0], searchOutput[1], searchOutput[2], searchInputButton, nextRet, goBackButton);
         searchRoomPermissions.setSpacing(15);
 
         FlowPane searchHub = new FlowPane();
