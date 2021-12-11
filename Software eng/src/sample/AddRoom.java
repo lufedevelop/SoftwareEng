@@ -36,17 +36,19 @@ public class AddRoom extends Application {
         // addMessage = "Room successfully added" -- green text
         Button addRoom = new Button("ADD ROOM");
         addRoom.setOnAction(e -> {
-            int addId = Integer.parseInt(addIDInput.getText());
-            Utils.driver.addRoom(addId, "Living Style",
-                    "Room Type",
-                    1,
-                    "Residence Address",
-                    false,
-                    "Student Usernames");
+            Integer addId = Integer.parseInt(addIDInput.getText());
+            Utils.driver.addRoom(addId,
+                    "Residence Hall",
+                    "Basic Single",
+                    11196,
+                    "Bartley Residence Bartley Cir",
+                    true,
+                    null);
             try {
                 boolean isAdded = true;//new_driver.addRoom();
                 if (isAdded){
                     //room is added
+                    //@SAM TODO
 
                 }
                 else {

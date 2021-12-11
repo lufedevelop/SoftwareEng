@@ -215,8 +215,8 @@ public class Driver {
         return false;
     }
     //add a new room to the db
-    public static boolean addRoom(int residence_ID, String living_style, String room_type,
-                                  int residence_price,String residence_address,
+    public static boolean addRoom(Integer residence_ID, String living_style, String room_type,
+                                  Integer residence_price,String residence_address,
                                   boolean has_mealplan, String student_usernames){
         Connection myConn = null;
         Statement myStmt = null;
@@ -241,6 +241,7 @@ public class Driver {
                     return false;
                 }
             }
+            System.out.println("adding room "+residence_ID+" to database...");
             PreparedStatement prep = myConn.prepareStatement(
                     "insert into residence (residence_ID, living_style, room_type, residence_price," +
                             "residence_address, has_mealplan, student_usernames) values (?, ?, ? ,? ,? ,? ,?)");
