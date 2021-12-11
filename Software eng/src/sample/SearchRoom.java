@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class SearchRoom extends Application {
-    static StudentHub studentHub = new StudentHub();
-
     @Override
     public void start(Stage primaryStage) throws Exception{
         VBox searchRoomPermissions = new VBox();
@@ -162,15 +160,14 @@ public class SearchRoom extends Application {
         // ex. show 0-2, 3-5, 6-8, etc.
         Button searchInputButton = new Button("SEARCH");
         searchInputButton.setOnAction(e -> {
+            String keyword = inputSearch.getText();
             // Get search results from database as object
-            Driver new_driver = new Driver();
             try {
-                DBResidence new_residence = new_driver.isResidence("Single");
+                //DBResidence new_residence = Utils.driver.isResidence(keyword);
             }
             catch (Exception ex){
                 ex.printStackTrace();
             }
-
         });
 
         Button next = new Button("NEXT SEARCH");
@@ -183,19 +180,19 @@ public class SearchRoom extends Application {
         // stop
         Button goBackButton = new Button("BACK TO HUB");
         goBackButton.setOnAction(e -> {
-            /*
-            For now this always sends you back to the studentHub
-            even though managers can also access this room.
-            once the database con and login system are properly
-            implemented I will change it to check some global
-            variable that checks if you're a manager or student
-            and yeets you back to the proper room. -sam
-             */
-            try {
-                studentHub.start(primaryStage);
+            if (Utils.privilege == "Student") {
+                try {
+                    Utils.studentHub.start(primaryStage);
+                } catch (Exception err) {
+                    System.out.println(err);
+                }
             }
-            catch (Exception err) {
-                System.out.println(err);
+            else {
+                try {
+                    Utils.managerHub.start(primaryStage);
+                } catch (Exception err) {
+                    System.out.println(err);
+                }
             }
         });
 
@@ -210,10 +207,5 @@ public class SearchRoom extends Application {
         Scene searchHubScreen = new Scene(searchHub);
         primaryStage.setScene(searchHubScreen);
         primaryStage.show();
-    }
-
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

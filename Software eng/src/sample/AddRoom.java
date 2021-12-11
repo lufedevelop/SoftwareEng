@@ -15,8 +15,6 @@ import javafx.scene.layout.VBox;
 import java.util.concurrent.Flow;
 
 public class AddRoom extends Application {
-    static ManagerHub managerHub = new ManagerHub();
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         VBox modPermissions = new VBox();
@@ -36,22 +34,31 @@ public class AddRoom extends Application {
         // addMessage = "please enter an ID to assign to room!"
         // else
         // addMessage = "Room successfully added" -- green text
-        Driver new_driver = new Driver();
-        try {
-            boolean isAdded = new_driver.addRoom();
-            if (isAdded){
-                //room is added
-
-            }
-            else {
-                //room is not added
-
-            }
-        }
-        catch (Exception ex){
-            ex.printStackTrace();
-        }
         Button addRoom = new Button("ADD ROOM");
+        addRoom.setOnAction(e -> {
+            int addId = Integer.parseInt(addIDInput.getText());
+            Utils.driver.addRoom(addId, "Living Style",
+                    "Room Type",
+                    1,
+                    "Residence Address",
+                    false,
+                    "Student Usernames");
+            try {
+                boolean isAdded = true;//new_driver.addRoom();
+                if (isAdded){
+                    //room is added
+
+                }
+                else {
+                    //room is not added
+
+                }
+            }
+            catch (Exception ex){
+                ex.printStackTrace();
+            }
+        });
+
         Label subServ = new Label("Remove a Room");
         Label subSpec = new Label("Enter a Valid Room ID:");
         TextField subIDInput = new TextField();
@@ -64,29 +71,31 @@ public class AddRoom extends Application {
         // subMessage = "Room cannot be removed until it is empty!" -- red text
         // else
         // subMessage = "Room successfully removed" -- green text
-        try {
-            boolean isRemoved = new_driver.deleteRoom(0000);
-            if (isRemoved){
-                //room is removed
 
-            }
-            else {
-                //room is not removed
-
-            }
-        }
-        catch (Exception ex){
-            ex.printStackTrace();
-        }
         Button subRoom = new Button("REMOVE ROOM");
+        subRoom.setOnAction(e -> {
+            int removeId = Integer.parseInt(subIDInput.getText());
+            try {
+                boolean isRemoved = Utils.driver.deleteRoom(removeId);
+                if (isRemoved){
+                    subMessage.setText("Room removed successfully");
+                }
+                else {
+                    subMessage.setText("Error removing room");
+                }
+            }
+            catch (Exception ex){
+                ex.printStackTrace();
+            }
+        });
 
         Button goBackButton = new Button("BACK TO HUB");
         goBackButton.setOnAction(e -> {
             try {
-                managerHub.start(primaryStage);
+                Utils.managerHub.start(primaryStage);
             }
-            catch (Exception err) {
-                System.out.println(err);
+            catch (Exception ex) {
+                ex.printStackTrace();
             }
         });
 
@@ -100,10 +109,5 @@ public class AddRoom extends Application {
         Scene modHubScreen = new Scene(modHub);
         primaryStage.setScene(modHubScreen);
         primaryStage.show();
-    }
-
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

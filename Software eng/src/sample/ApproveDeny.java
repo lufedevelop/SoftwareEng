@@ -16,17 +16,8 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class ApproveDeny extends Application {
-    static ManagerHub managerHub = new ManagerHub();
-
     @Override
     public void start(Stage primaryStage) throws Exception{
-        // title for window
-        primaryStage.setTitle("Approve / Deny Student Application");
-        // window width
-        primaryStage.setWidth(600);
-        // window height
-        primaryStage.setHeight(500);
-
         VBox appDenPermissions = new VBox();
         HBox buttonAppDen = new HBox();
         HBox buttonForBack = new HBox();
@@ -187,10 +178,10 @@ public class ApproveDeny extends Application {
         Button goBackButton = new Button("BACK TO HUB");
         goBackButton.setOnAction(e -> {
             try {
-                managerHub.start(primaryStage);
+                Utils.managerHub.start(primaryStage);
             }
-            catch (Exception err) {
-                System.out.println(err);
+            catch (Exception ex) {
+                ex.printStackTrace();
             }
         });
 
@@ -206,10 +197,5 @@ public class ApproveDeny extends Application {
         Scene appDenHubScreen = new Scene(appDenHub);
         primaryStage.setScene(appDenHubScreen);
         primaryStage.show();
-    }
-
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

@@ -1,6 +1,7 @@
 package sample;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Driver {
     //check if the user is a student in the db
@@ -75,7 +76,7 @@ public class Driver {
         return null;
     }
     //check if in the db a room with the keyword exists
-    public static DBResidence isResidence(String keyword) throws SQLException {
+    public static ArrayList<DBResidence> isResidence(String keyword) throws SQLException {
         Connection myConn = null;
         Statement myStmt = null;
         ResultSet myRs = null;
@@ -91,6 +92,7 @@ public class Driver {
             myStmt = myConn.createStatement();
             // Get a result from the db
             myRs = myStmt.executeQuery("select * from residence");
+            ArrayList <DBResidence> rooms = new ArrayList<DBResidence>();
             while (myRs.next()){
                 Integer residence_ID_DB = myRs.getInt("residence_ID");
                 String living_style_DB = myRs.getString("living_style");
@@ -99,17 +101,27 @@ public class Driver {
                 String residence_address_DB = myRs.getString("residence_address");
                 boolean has_mealplan_DB = myRs.getBoolean("has_mealplan"); //not a keyword for the search
                 String student_usernames_DB = myRs.getString("student_usernames");
-                if (residence_ID_DB.equals(keyword) || living_style_DB.equals(keyword) ||
+                if (student_usernames_DB != null){
+                    if (student_usernames_DB.equals(keyword)){
+                        System.out.println("room for keyword "+keyword+" found");
+                        rooms.add(new DBResidence(residence_ID_DB, living_style_DB, room_type_DB, residence_price_DB,
+                                residence_address_DB, has_mealplan_DB, student_usernames_DB));
+                    }
+                }
+                else if (residence_ID_DB.equals(keyword) || living_style_DB.equals(keyword) ||
                         room_type_DB.equals(keyword) || residence_price_DB.equals(keyword) ||
-                        residence_address_DB.equals(keyword) || student_usernames_DB.equals(keyword)){
-                    return new DBResidence(residence_ID_DB, living_style_DB, room_type_DB, residence_price_DB,
-                            residence_address_DB, has_mealplan_DB, student_usernames_DB);
+                        residence_address_DB.equals(keyword)){
+                    System.out.println("room for keyword "+keyword+" found");
+                    rooms.add(new DBResidence(residence_ID_DB, living_style_DB, room_type_DB, residence_price_DB,
+                            residence_address_DB, has_mealplan_DB, student_usernames_DB));
                 }
             }
+            return rooms;
         }
         catch (Exception exc) {
             exc.printStackTrace();
         }
+        System.out.println("no room for keyword" +keyword+" found");
         return null;
     }
     //add a student to a room in the db
@@ -215,6 +227,7 @@ public class Driver {
                 Integer residence_ID_DB = myRs.getInt("residence_ID");
                 if (residence_ID_DB.equals(residence_ID)) {
                     //room already exists
+                    System.out.println("room "+residence_ID+" already exists");
                     return false;
                 }
             }
@@ -229,6 +242,7 @@ public class Driver {
             prep.setBoolean(6, has_mealplan);
             prep.setString(7, student_usernames);
             prep.executeUpdate();
+            System.out.println("room "+residence_ID+" is added to the database");
             return true;
         }
         catch (Exception exc) {
@@ -237,7 +251,7 @@ public class Driver {
         return false;
     }
     //delete a room from the db
-    public static boolean deleteRoom(int roomID){
+    public static boolean deleteRoom(int roomID) {
         Connection myConn = null;
         Statement myStmt = null;
         ResultSet myRs = null;
@@ -245,7 +259,7 @@ public class Driver {
         String dbUrl = "jdbc:mysql://localhost:3306/myresidence_db";
         String user = "root";
         String pass = "root";
-        System.out.println("room to remove is "+ roomID);
+        System.out.println("room to remove is " + roomID);
         try {
             // Get a connection to db
             myConn = DriverManager.getConnection(dbUrl, user, pass);
@@ -260,18 +274,16 @@ public class Driver {
                     PreparedStatement prep = myConn.prepareStatement("delete from residence where residence_ID=?");
                     prep.setInt(1, roomID);
                     prep.executeUpdate();
+                    System.out.println("room "+roomID+" is deleted");
                     return true;
                 }
             }
+            System.out.println("room "+roomID+" doesn't exists");
             //room not found
             return false;
-        }
-        catch (Exception exc) {
+        } catch (Exception exc) {
             exc.printStackTrace();
         }
         return false;
-
-
-
-
+    }
 }

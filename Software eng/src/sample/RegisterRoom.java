@@ -11,8 +11,6 @@ import javafx.stage.Stage;
 import javafx.scene.layout.VBox;
 
 public class RegisterRoom extends Application{
-    static StudentHub studentHub = new StudentHub();
-
     @Override
     public void start(Stage primaryStage) throws Exception{
 
@@ -31,9 +29,9 @@ public class RegisterRoom extends Application{
         // displayActions = "Registration Successful / Complete" -- Green text
         Button registerIdInputButton = new Button("REGISTER");
         registerIdInputButton.setOnAction(e -> {
-            Driver new_driver = new Driver();
+            int roomId = Integer.parseInt(roomIdInput.getText());
             try {
-                boolean isAdded = new_driver.addStudentToRoom("lfederle", 1002);
+                boolean isAdded = Utils.driver.addStudentToRoom(Utils.username, roomId);
                 if (isAdded){
                     //user is added
 
@@ -51,10 +49,13 @@ public class RegisterRoom extends Application{
         Button goBackButton = new Button("BACK TO HUB");
         goBackButton.setOnAction(e -> {
             try {
-                studentHub.start(primaryStage);
+                if (Utils.privilege == "Student")
+                    Utils.studentHub.start(primaryStage);
+                else if (Utils.privilege == "Manager")
+                    Utils.managerHub.start(primaryStage);
             }
-            catch (Exception err) {
-                System.out.println(err);
+            catch (Exception ex) {
+                ex.printStackTrace();
             }
         });
 
@@ -69,10 +70,5 @@ public class RegisterRoom extends Application{
         Scene regHubScreen = new Scene(registerHub, 300, 250);
         primaryStage.setScene(regHubScreen);
         primaryStage.show();
-    }
-
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

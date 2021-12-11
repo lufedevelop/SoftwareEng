@@ -14,8 +14,6 @@ import javafx.scene.layout.VBox;
 
 public class StudentHub extends Application {
     Image logo = new Image("file:logo.png");
-    static SearchRoom searchRoom = new SearchRoom();
-    static RegisterRoom registerRoom = new RegisterRoom();
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -24,7 +22,7 @@ public class StudentHub extends Application {
 
         VBox stageStuSet = new VBox();
         VBox studentPermissions = new VBox();
-        Label welcomeStu = new Label("\t            Welcome" + "     [PLACEHOLDER]"); // Add first name of student from database
+        Label welcomeStu = new Label("\t            Welcome " + Utils.username); // Add first name of student from database
         welcomeStu.setFont(new Font("Helvetica", 12));
         Label selectServ = new Label("\tSelect a Feature:");
         selectServ.setFont(new Font("Helvetica", 24));
@@ -33,10 +31,10 @@ public class StudentHub extends Application {
         Button searchRoomButton = new Button("Search for a Room");
         searchRoomButton.setOnAction(e -> {
             try {
-                searchRoom.start(primaryStage);
+                Utils.searchRoom.start(primaryStage);
             }
-            catch (Exception err) {
-                System.out.println(err);
+            catch (Exception ex) {
+                ex.printStackTrace();
             }
         });
 
@@ -44,10 +42,10 @@ public class StudentHub extends Application {
         Button registerRoomButton = new Button("Register for a Room");
         registerRoomButton.setOnAction(e -> {
             try {
-                registerRoom.start(primaryStage);
+                Utils.registerRoom.start(primaryStage);
             }
-            catch (Exception err) {
-                System.out.println(err);
+            catch (Exception ex) {
+                ex.printStackTrace();
             }
         });
 
@@ -67,10 +65,5 @@ public class StudentHub extends Application {
         Scene stuHubScreen = new Scene(studentHub, 300, 250);
         primaryStage.setScene(stuHubScreen);
         primaryStage.show();
-    }
-
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

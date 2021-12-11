@@ -17,13 +17,8 @@ import javafx.stage.Stage;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.sql.SQLException;
-
 // public class Main extends Application
 public class Main extends Application {
-    static StudentHub studentHub = new StudentHub();
-    static ManagerHub managerHub = new ManagerHub();
-
     Image logo = new Image("file:logo.png");
     // overriding start void function
     @Override
@@ -115,6 +110,7 @@ public class Main extends Application {
 
         // on clicking the login button
         login.setOnAction(e -> {
+            
             // if both text fields are empty
             if ((displayUserName.getText().equals("")) && (displayPassWord.getText().equals(""))) {
                 // displays that both requirements are missing to the user
@@ -133,17 +129,19 @@ public class Main extends Application {
             // if both of the fields are not empty
             if ((displayUserName.getText() != "") && (displayPassWord.getText() != "")) {
                 //create Driver Object and verify entered username and password
-                Driver new_driver = new Driver();
+                Utils.username = displayUserName.getText();
                 try {
-                    DBStudent new_student = new_driver.isStudent(displayUserName.getText(), displayPassWord.getText());
-                    DBManager new_manager = new_driver.isManager(displayUserName.getText(), displayPassWord.getText());
+                    DBStudent new_student = Utils.driver.isStudent(Utils.username, displayPassWord.getText());
+                    DBManager new_manager = Utils.driver.isManager(Utils.username, displayPassWord.getText());
                     //if student open student start page
                     if (new_student != null){
-                        studentHub.start(primaryStage);
+                        Utils.studentHub.start(primaryStage);
+                        Utils.privilege = "Student";
                     }
                     //if manager open manager start page
                     else if (new_manager != null){
-                        managerHub.start(primaryStage);
+                        Utils.managerHub.start(primaryStage);
+                        Utils.privilege = "Manager";
                     }
                     else{
                         errorMessageField.setText("Incorrect Credentials");
