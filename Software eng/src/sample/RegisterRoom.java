@@ -34,10 +34,12 @@ public class RegisterRoom extends Application{
                 boolean isAdded = Utils.driver.addStudentToRoom(Utils.username, roomId);
                 if (isAdded){
                     //user is added
+                    //@SAM TODO
 
                 }
                 else {
                     //room not available
+                    //@SAM TODO
 
                 }
             }

@@ -4,6 +4,7 @@ package sample;
 import java.sql.*;
 import java.util.ArrayList;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 public class Driver {
     //check if the user is a student in the db
@@ -104,17 +105,10 @@ public class Driver {
                 Integer residence_price_DB = myRs.getInt("residence_price");
                 String residence_address_DB = myRs.getString("residence_address");
                 boolean has_mealplan_DB = myRs.getBoolean("has_mealplan"); //not a keyword for the search
-                String student_usernames_DB = myRs.getString("student_usernames");
-                if (student_usernames_DB != null){
-                    if (student_usernames_DB.equals(keyword)){
-                        System.out.println("room for keyword "+keyword+" found");
-                        rooms.add(new DBResidence(residence_ID_DB, living_style_DB, room_type_DB, residence_price_DB,
-                                residence_address_DB, has_mealplan_DB, student_usernames_DB));
-                    }
-                }
-                else if (StringUtils.isNumeric(keyword)){
+                String student_usernames_DB = myRs.getString("student_usernames"); //not a keyword for the search
+                if (NumberUtils.isParsable(keyword)){
                     Integer intKeyword = Integer.parseInt(keyword);
-                    if (residence_price_DB==intKeyword || residence_ID_DB==intKeyword){
+                    if (residence_price_DB.equals(intKeyword) || residence_ID_DB.equals(intKeyword)){
                         System.out.println("room for keyword "+keyword+" found");
                         rooms.add(new DBResidence(residence_ID_DB, living_style_DB, room_type_DB, residence_price_DB,
                                 residence_address_DB, has_mealplan_DB, student_usernames_DB));
