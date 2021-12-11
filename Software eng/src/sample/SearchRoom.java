@@ -161,9 +161,26 @@ public class SearchRoom extends Application {
         Button searchInputButton = new Button("SEARCH");
         searchInputButton.setOnAction(e -> {
             String keyword = inputSearch.getText();
+
             // Get search results from database as object
             try {
-                //DBResidence new_residence = Utils.driver.isResidence(keyword);
+                ArrayList<DBResidence> rooms = Driver.isResidence(keyword);
+                DBResidence room;
+
+                for (var i = 0; i < 3; ++i) {
+                    if (i + index > rooms.size()) {
+                        room = rooms.get(i + index);
+                    }
+                    else {
+
+                        return;
+                    }
+                    searchOutput[i].setText(
+                            "Room: " + room.getID() +
+                                    "\nStyle: " + room.getStyle() +
+                                    "\nPrice: " + room.getPrice()
+                    );
+                }
             }
             catch (Exception ex){
                 ex.printStackTrace();

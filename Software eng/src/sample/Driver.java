@@ -31,6 +31,7 @@ public class Driver {
                 System.out.println(student_user_DB);
                 System.out.println(student_password_DB);
                 if (student_user_DB.equals(user_GUI) && student_password_DB.equals(password_GUI)){
+                    System.out.println("username "+ user_GUI+ "  is Student");
                     return new DBStudent(student_user_DB, student_password_DB, student_email_DB, student_name_DB,
                             year_num_DB, residence_ID_DB);
                 }
@@ -66,6 +67,7 @@ public class Driver {
                 System.out.println(manager_user_DB);
                 System.out.println(manager_password_DB);
                 if (manager_user_DB.equals(user_GUI) && manager_password_DB.equals(password_GUI)){
+                    System.out.println("username "+ user_GUI+ "  is Manager");
                     return new DBManager(manager_user_DB, manager_password_DB, manager_email_DB, manager_name_DB);
                 }
             }
@@ -167,6 +169,7 @@ public class Driver {
             }
             //room doesn't exist
             if (maxUser==0){
+                System.out.println("room "+ roomID+ "  doesn't exist");
                 return false;
             }
             if (currentUsers == null){
@@ -176,6 +179,7 @@ public class Driver {
                 String[] splitStr = currentUsers.split("\\s+");
                 //room is already full
                 if (splitStr.length >= maxUser) {
+                    System.out.println("room "+ roomID+ "  is full");
                     return false;
                 }
                 //add new username to the list of users
@@ -197,6 +201,7 @@ public class Driver {
             prep.setInt(1, roomID);
             prep.setString(2, username);
             prep.executeUpdate();
+            System.out.println("user "+ username+" is added to room "+roomID);
             return true;
         }
         catch (Exception exc) {
