@@ -33,14 +33,10 @@ public class RegisterRoom extends Application{
             try {
                 boolean isAdded = Utils.driver.addStudentToRoom(Utils.username, roomId);
                 if (isAdded){
-                    //user is added
-                    //@SAM TODO
-
+                    displayActions.setText("Room registered successfully.");
                 }
                 else {
-                    //room not available
-                    //@SAM TODO
-
+                    displayActions.setText("Error registering for room.");
                 }
             }
             catch (Exception ex){
