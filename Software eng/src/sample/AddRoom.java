@@ -84,24 +84,18 @@ public class AddRoom extends Application {
 
             System.out.println("ID: " + addId + "\nLiving Style: " + livingStyle + "\nroomType: " + roomType + "\nprice: " + price + "\naddress: " + address + "\nMealplan: " + hasMealplan);
 
-            Utils.driver.addRoom(addId,
+            boolean isAdded = Utils.driver.addRoom(addId,
                     livingStyle,
                     roomType,
                     price,
                     address,
                     hasMealplan,
                     null);
-            try {
-                boolean isAdded = true;
-                if (isAdded){
-                    addMessage.setText("Room added successfully!");
-                }
-                else {
-                    addMessage.setText("Problem adding room. Check information and try again.");
-                }
+            if (isAdded){
+                addMessage.setText("Room added successfully!");
             }
-            catch (Exception ex){
-                ex.printStackTrace();
+            else {
+                addMessage.setText("Problem adding room. Check information and try again.");
             }
         });
 
