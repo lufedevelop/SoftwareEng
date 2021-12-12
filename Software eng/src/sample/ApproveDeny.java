@@ -10,12 +10,13 @@ import javafx.stage.Stage;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class ApproveDeny extends Application {
+    ArrayList<DBStudent> students;
+    Label studentApp = new Label("");
+    int index = 0;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         VBox appDenPermissions = new VBox();
@@ -24,12 +25,23 @@ public class ApproveDeny extends Application {
 
         Label appDenServ = new Label("Approve or Deny Student Applications");
         Button appDenCheck = new Button("VIEW APPLICATION");
+        appDenCheck.setOnAction(e -> {
+            // Get search results from database as object
+            try {
+                students = Driver.getPendingStudents();
+                updateDisplay();
+            }
+            catch (Exception ex){
+                ex.printStackTrace();
+            }
+        });
+
         // if number of outstanding apps >= 1
         // appDenCheck = "Outstanding Applications Exist!" -- red
         //else
         // appDenCheck = "No outstanding Applications" -- green
         Label errorCheckingApp = new Label("");
-        Label studentApp = new Label("[PLACEHOLDER NAME] " + " [PLACEHOLDER ID] " + " [PLACEHOLDER ROOM REQUEST] ");
+
         // set action
         // if no new applications exist
         // errorCheckingApp = "No applications to view!"
@@ -37,143 +49,45 @@ public class ApproveDeny extends Application {
         // else
         // set label to name, id, and request of student from database
 
-        List<Label> studentAppList = new List<Label>() {
-            @Override
-            public int size() {
-                // return size of application query
-                return 0;
-            }
-
-            @Override
-            public boolean isEmpty() {
-                // if no results exist within query
-                return false;
-                // if results from query >= 1
-                // return true
-            }
-
-            @Override
-            public boolean contains(Object o) {
-                return false;
-            }
-
-            @Override
-            public Iterator<Label> iterator() {
-                return null;
-            }
-
-            @Override
-            public Object[] toArray() {
-                // List will assign array index to list values
-                return new Object[0];
-            }
-
-            @Override
-            public <T> T[] toArray(T[] a) {
-                return null;
-            }
-
-            @Override
-            public boolean add(Label label) {
-                return false;
-            }
-
-            @Override
-            public boolean remove(Object o) {
-                return false;
-            }
-
-            @Override
-            public boolean containsAll(Collection<?> c) {
-                return false;
-            }
-
-            @Override
-            public boolean addAll(Collection<? extends Label> c) {
-                return false;
-            }
-
-            @Override
-            public boolean addAll(int index, Collection<? extends Label> c) {
-                return false;
-            }
-
-            @Override
-            public boolean removeAll(Collection<?> c) {
-                return false;
-            }
-
-            @Override
-            public boolean retainAll(Collection<?> c) {
-                return false;
-            }
-
-            @Override
-            public void clear() {
-
-            }
-
-            @Override
-            public Label get(int index) {
-                return null;
-            }
-
-            @Override
-            public Label set(int index, Label element) {
-                return null;
-            }
-
-            @Override
-            public void add(int index, Label element) {
-
-            }
-
-            @Override
-            public Label remove(int index) {
-                return null;
-            }
-
-            @Override
-            public int indexOf(Object o) {
-                return 0;
-            }
-
-            @Override
-            public int lastIndexOf(Object o) {
-                return 0;
-            }
-
-            @Override
-            public ListIterator<Label> listIterator() {
-                return null;
-            }
-
-            @Override
-            public ListIterator<Label> listIterator(int index) {
-                return null;
-            }
-
-            @Override
-            public List<Label> subList(int fromIndex, int toIndex) {
-                return null;
-            }
-        };
-        // set on action
-        // if value of current index = array length
-        // do not continue
         Button viewApp = new Button("Next Application");
-        // set on action
-        // if value of current index is 0
-        // do not continue
-        Button viewPreApp = new Button("Previous Application");
+        viewApp.setOnAction(e -> {
+            index++;
+            if (index > students.size() - 1)
+                index = students.size() - 1;
+            updateDisplay();
+        });
 
+        Button viewPreApp = new Button("Previous Application");
+        viewPreApp.setOnAction(e -> {
+            index--;
+            if (index < 0)
+                index = 0;
+            updateDisplay();
+        });
         // set on action
         // if no application is present to approve / deny
         // errorCheckingApp = "No application present!"
         // else
         // continue
         Button approveStu = new Button("APPROVE");
+        approveStu.setOnAction(e -> {
+            Driver.approveStudent(students.get(index).getName());
+            studentApp.setText("");
+            students.remove(index);
+            if (index > students.size() - 1)
+                index--;
+            updateDisplay();
+        });
+
         Button denyStu = new Button("DENY");
+        denyStu.setOnAction(e -> {
+            Driver.denyStudent(students.get(index).getName(), students.get(index).getResID());
+            studentApp.setText("");
+            students.remove(index);
+            if (index > students.size() - 1)
+                index--;
+            updateDisplay();
+        });
 
         Button goBackButton = new Button("BACK TO HUB");
         goBackButton.setOnAction(e -> {
@@ -197,5 +111,18 @@ public class ApproveDeny extends Application {
         Scene appDenHubScreen = new Scene(appDenHub);
         primaryStage.setScene(appDenHubScreen);
         primaryStage.show();
+    }
+
+    private void updateDisplay() {
+        int id = 0;
+        String name = "name";
+        try {
+            id = students.get(index).getResID();
+            name = students.get(index).getName();
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        studentApp.setText("Name: " + name + " Room ID: " + id);
     }
 }
