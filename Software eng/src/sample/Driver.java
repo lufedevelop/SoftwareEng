@@ -297,4 +297,40 @@ public class Driver {
         }
         return false;
     }
+    //get all residences from the database
+    public static ArrayList<DBResidence> getAllResidences() throws SQLException {
+        Connection myConn = null;
+        Statement myStmt = null;
+        ResultSet myRs = null;
+
+        String dbUrl = "jdbc:mysql://localhost:3306/myresidence_db";
+        String user = "root";
+        String pass = "root";
+        System.out.println("all residences will be returned");
+        try {
+            // Get a connection to db
+            myConn = DriverManager.getConnection(dbUrl, user, pass);
+            // Create a statement
+            myStmt = myConn.createStatement();
+            // Get a result from the db
+            myRs = myStmt.executeQuery("select * from residence");
+            ArrayList <DBResidence> rooms = new ArrayList<DBResidence>();
+            while (myRs.next()){
+                Integer residence_ID_DB = myRs.getInt("residence_ID");
+                String living_style_DB = myRs.getString("living_style");
+                String room_type_DB = myRs.getString("room_type");
+                Integer residence_price_DB = myRs.getInt("residence_price");
+                String residence_address_DB = myRs.getString("residence_address");
+                boolean has_mealplan_DB = myRs.getBoolean("has_mealplan");
+                String student_usernames_DB = myRs.getString("student_usernames");
+                rooms.add(new DBResidence(residence_ID_DB, living_style_DB, room_type_DB, residence_price_DB,
+                        residence_address_DB, has_mealplan_DB, student_usernames_DB));
+            }
+            return rooms;
+        }
+        catch (Exception exc) {
+            exc.printStackTrace();
+        }
+        return null;
+    }
 }

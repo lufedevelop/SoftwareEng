@@ -24,16 +24,7 @@ public class AddRoom extends Application {
         Label addSpec = new Label("Enter New Room ID:");
         TextField addIDInput = new TextField();
         Label addMessage = new Label("");
-        // we also need int residence_ID, String living_style, String room_type,
-        //                                  int residence_price,String residence_address,
-        //                                  boolean has_mealplan, String student_usernames
         // set on action
-        // if new room ID matches another existing room ID
-        // addMessage = "Room already exists!" -- red text
-        // if ID input is NULL
-        // addMessage = "please enter an ID to assign to room!"
-        // else
-        // addMessage = "Room successfully added" -- green text
         Button addRoom = new Button("ADD ROOM");
         addRoom.setOnAction(e -> {
             Integer addId = Integer.parseInt(addIDInput.getText());
@@ -64,13 +55,6 @@ public class AddRoom extends Application {
         Label subMessage = new Label("");
 
         // set on action
-        // if input is NULL or incorrect
-        // subMessage = "Wrong or Missing Room ID!" -- red text
-        // if room is occupied
-        // subMessage = "Room cannot be removed until it is empty!" -- red text
-        // else
-        // subMessage = "Room successfully removed" -- green text
-
         Button subRoom = new Button("REMOVE ROOM");
         subRoom.setOnAction(e -> {
             int removeId = Integer.parseInt(subIDInput.getText());
