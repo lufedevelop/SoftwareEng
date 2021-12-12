@@ -8,14 +8,16 @@ final class DBStudent {
     private final String name;
     private final int year;
     private final int resID;
+    private final boolean application_pending;
 
-    public DBStudent(String user, String pass, String mail, String name, int year, int resID){
+    public DBStudent(String user, String pass, String mail, String name, int year, int resID, boolean application_pending){
         this.user = user;
         this.pass = pass;
         this.mail = mail;
         this.name = name;
         this.year = year;
         this.resID = resID;
+        this.application_pending = application_pending;
     }
 
     public String getUser() {
@@ -40,5 +42,9 @@ final class DBStudent {
 
     public int getResID() {
         return resID;
+    }
+
+    public boolean isApplication_pending() {
+        return application_pending;
     }
 }

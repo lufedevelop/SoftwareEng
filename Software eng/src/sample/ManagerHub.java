@@ -19,6 +19,10 @@ public class ManagerHub extends Application {
     public void start(Stage primaryStage) throws Exception{
         // title for window
         primaryStage.setTitle("myResidence: MANAGER");
+        // window width
+        primaryStage.setWidth(600);
+        // window height
+        primaryStage.setHeight(500);
 
         VBox managerPermissions = new VBox();
         VBox stageSet = new VBox();
@@ -65,9 +69,11 @@ public class ManagerHub extends Application {
         showLogo.setImage(logo);
 
         managerPermissions.getChildren().addAll(selectMServ, searchMRoomButton, addSubRoomButton, appDenReqButton);
+        managerPermissions.setAlignment(Pos.CENTER);
         managerPermissions.setSpacing(15);
 
         stageSet.getChildren().addAll(welcome, managerPermissions, showLogo);
+        stageSet.setAlignment(Pos.CENTER);
         stageSet.setSpacing(5);
 
         FlowPane managerHub = new FlowPane();

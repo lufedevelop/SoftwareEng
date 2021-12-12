@@ -19,6 +19,10 @@ public class StudentHub extends Application {
     public void start(Stage primaryStage) throws Exception{
         // title for window
         primaryStage.setTitle("myResidence: STUDENT");
+        // window width
+        primaryStage.setWidth(600);
+        // window height
+        primaryStage.setHeight(500);
 
         VBox stageStuSet = new VBox();
         VBox studentPermissions = new VBox();
@@ -53,9 +57,11 @@ public class StudentHub extends Application {
         showLogo.setImage(logo);
 
         studentPermissions.getChildren().addAll(selectServ, searchRoomButton, registerRoomButton);
+        studentPermissions.setAlignment(Pos.CENTER);
         studentPermissions.setSpacing(15);
 
         stageStuSet.getChildren().addAll(welcomeStu, studentPermissions, showLogo);
+        stageStuSet.setAlignment(Pos.CENTER);
         stageStuSet.setSpacing(5);
 
         FlowPane studentHub = new FlowPane();

@@ -1,5 +1,3 @@
-// Author: Jacob Lavoie 1108243
-// This is a prototype GUI implementation for myResidence
 package sample;
 // importing javafx libraries
 import javafx.application.Application;

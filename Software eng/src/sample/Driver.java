@@ -3,6 +3,9 @@ package sample;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -29,14 +32,15 @@ public class Driver {
                 String student_password_DB = myRs.getString("student_password");
                 String student_email_DB = myRs.getString("student_email");
                 String student_name_DB = myRs.getString("student_name");
-                int year_num_DB = myRs.getInt("year_num");
-                int residence_ID_DB = myRs.getInt("residence_ID");
+                Integer year_num_DB = myRs.getInt("year_num");
+                Integer residence_ID_DB = myRs.getInt("residence_ID");
+                boolean application_pending_DB = myRs.getBoolean("application_pending");
                 System.out.println(student_user_DB);
                 System.out.println(student_password_DB);
                 if (student_user_DB.equals(user_GUI) && student_password_DB.equals(password_GUI)){
                     System.out.println("username "+ user_GUI+ "  is Student");
                     return new DBStudent(student_user_DB, student_password_DB, student_email_DB, student_name_DB,
-                            year_num_DB, residence_ID_DB);
+                            year_num_DB, residence_ID_DB, application_pending_DB);
                 }
             }
         }
@@ -202,9 +206,10 @@ public class Driver {
             prep.setInt(2, roomID);
             prep.executeUpdate();
             // update the db table student
-            prep = myConn.prepareStatement("update student set residence_ID=? where student_username=?");
+            prep = myConn.prepareStatement("update student set residence_ID=? and application_pending=? where student_username=?");
             prep.setInt(1, roomID);
-            prep.setString(2, username);
+            prep.setBoolean(2, true);
+            prep.setString(3, username);
             prep.executeUpdate();
             System.out.println("user "+ username+" is added to room "+roomID);
             return true;
@@ -297,8 +302,9 @@ public class Driver {
         }
         return false;
     }
-    //get all residences from the database
-    public static ArrayList<DBResidence> getAllResidences() throws SQLException {
+    //functions for the approve/deny process
+    //get all pending students from the database
+    public static ArrayList<DBStudent> getPendingStudents() throws SQLException {
         Connection myConn = null;
         Statement myStmt = null;
         ResultSet myRs = null;
@@ -306,25 +312,27 @@ public class Driver {
         String dbUrl = "jdbc:mysql://localhost:3306/myresidence_db";
         String user = "root";
         String pass = "root";
-        System.out.println("all residences will be returned");
+        System.out.println("all pending students will be returned");
         try {
             // Get a connection to db
             myConn = DriverManager.getConnection(dbUrl, user, pass);
             // Create a statement
             myStmt = myConn.createStatement();
             // Get a result from the db
-            myRs = myStmt.executeQuery("select * from residence");
-            ArrayList <DBResidence> rooms = new ArrayList<DBResidence>();
+            myRs = myStmt.executeQuery("select * from student");
+            ArrayList <DBStudent> rooms = new ArrayList<DBStudent>();
             while (myRs.next()){
+                String student_user_DB = myRs.getString("student_username");
+                String student_password_DB = myRs.getString("student_password");
+                String student_email_DB = myRs.getString("student_email");
+                String student_name_DB = myRs.getString("student_name");
+                Integer year_num_DB = myRs.getInt("year_num");
                 Integer residence_ID_DB = myRs.getInt("residence_ID");
-                String living_style_DB = myRs.getString("living_style");
-                String room_type_DB = myRs.getString("room_type");
-                Integer residence_price_DB = myRs.getInt("residence_price");
-                String residence_address_DB = myRs.getString("residence_address");
-                boolean has_mealplan_DB = myRs.getBoolean("has_mealplan");
-                String student_usernames_DB = myRs.getString("student_usernames");
-                rooms.add(new DBResidence(residence_ID_DB, living_style_DB, room_type_DB, residence_price_DB,
-                        residence_address_DB, has_mealplan_DB, student_usernames_DB));
+                boolean application_pending_DB = myRs.getBoolean("application_pending");
+                if (application_pending_DB==true) {
+                    rooms.add(new DBStudent(student_user_DB, student_password_DB, student_email_DB, student_name_DB,
+                            year_num_DB, residence_ID_DB, application_pending_DB));
+                }
             }
             return rooms;
         }
@@ -332,5 +340,71 @@ public class Driver {
             exc.printStackTrace();
         }
         return null;
+    }
+    //approve a users application
+    public static boolean approveStudent(String username){
+        Connection myConn = null;
+        Statement myStmt = null;
+        ResultSet myRs = null;
+
+        String dbUrl = "jdbc:mysql://localhost:3306/myresidence_db";
+        String user = "root";
+        String pass = "root";
+        System.out.println("approve user "+username);
+        try {
+            // Get a connection to db
+            myConn = DriverManager.getConnection(dbUrl, user, pass);
+            // update the db table student
+            PreparedStatement prep = myConn.prepareStatement("update student set application_pending=? where student_username=?");
+            prep.setBoolean(1, false);
+            prep.setString(2, username);
+            prep.executeUpdate();
+            System.out.println("user "+ username+" is approved ");
+            return true;
+        }
+        catch (Exception exc) {
+            exc.printStackTrace();
+        }
+        return false;
+    }
+    //deny a users application
+    public static boolean denyStudent(String username, Integer roomID){
+        Connection myConn = null;
+        Statement myStmt = null;
+        ResultSet myRs = null;
+
+        String dbUrl = "jdbc:mysql://localhost:3306/myresidence_db";
+        String user = "root";
+        String pass = "root";
+        System.out.println("deny user "+username+" for room "+roomID);
+        try {
+            // Get a connection to db
+            myConn = DriverManager.getConnection(dbUrl, user, pass);
+            // Create a statement
+            myStmt = myConn.createStatement();
+            // get all the usernames from the room which includes the pending student
+            myRs = myStmt.executeQuery("select * from residence where residence_ID="+roomID);
+            String student_user_DB = myRs.getString("student_username");
+            List<String> items = Arrays.asList(student_user_DB.split("\\s*,\\s*"));
+            items.remove(username);
+            String remainingUsers = items.toString();
+            // update the db table student
+            PreparedStatement prep = myConn.prepareStatement("update student set application_pending=? and residence_ID=? where student_username=?");
+            prep.setBoolean(1, false);
+            prep.setInt(2, 0);
+            prep.setString(3, username);
+            prep.executeUpdate();
+            // update the residence table
+            prep = myConn.prepareStatement("update residence set student_usernames=? where residence_ID=?");
+            prep.setString(1, remainingUsers);
+            prep.setInt(2, roomID);
+            prep.executeUpdate();
+            System.out.println("user "+ username+" is denied ");
+            return true;
+        }
+        catch (Exception exc) {
+            exc.printStackTrace();
+        }
+        return false;
     }
 }
