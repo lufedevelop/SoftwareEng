@@ -194,7 +194,7 @@ public class Driver {
                 //add new username to the list of users
                 else {
                     String[] newUsers = new String[splitStr.length];
-                    for (int i = 0; i <= splitStr.length; i++) {
+                    for (int i = 0; i < splitStr.length; i++) {
                         newUsers[i] = splitStr[i];
                     }
                     strUsers = newUsers.toString();
@@ -206,10 +206,13 @@ public class Driver {
             prep.setInt(2, roomID);
             prep.executeUpdate();
             // update the db table student
-            prep = myConn.prepareStatement("update student set residence_ID=? and application_pending=? where student_username=?");
+            prep = myConn.prepareStatement("update student set residence_ID=? where student_username=?");
             prep.setInt(1, roomID);
-            prep.setBoolean(2, true);
-            prep.setString(3, username);
+            prep.setString(2, username);
+            prep.executeUpdate();
+            prep = myConn.prepareStatement("update student set application_pending=? where student_username=?");
+            prep.setBoolean(1, true);
+            prep.setString(2, username);
             prep.executeUpdate();
             System.out.println("user "+ username+" is added to room "+roomID);
             return true;
@@ -380,24 +383,30 @@ public class Driver {
         try {
             // Get a connection to db
             myConn = DriverManager.getConnection(dbUrl, user, pass);
-            // Create a statement
-            myStmt = myConn.createStatement();
             // get all the usernames from the room which includes the pending student
-            myRs = myStmt.executeQuery("select * from residence where residence_ID="+roomID);
-            String student_user_DB = myRs.getString("student_username");
-            List<String> items = Arrays.asList(student_user_DB.split("\\s*,\\s*"));
+            PreparedStatement prep = myConn.prepareStatement("select * from residence where residence_ID=?");
+            prep.setInt(1,roomID);
+            myRs = prep.executeQuery();
+            String student_user_DB=null;
+            while (myRs.next()){
+                student_user_DB = myRs.getString("student_usernames");
+            }
+            List<String> items = new ArrayList<String>(Arrays.asList(student_user_DB.split(" ")));
             items.remove(username);
             String remainingUsers = items.toString();
-            // update the db table student
-            PreparedStatement prep = myConn.prepareStatement("update student set application_pending=? and residence_ID=? where student_username=?");
-            prep.setBoolean(1, false);
-            prep.setInt(2, 0);
-            prep.setString(3, username);
-            prep.executeUpdate();
             // update the residence table
             prep = myConn.prepareStatement("update residence set student_usernames=? where residence_ID=?");
             prep.setString(1, remainingUsers);
             prep.setInt(2, roomID);
+            prep.executeUpdate();
+            // update the db table student
+            prep = myConn.prepareStatement("update student set residence_ID=? where student_username=?");
+            prep.setNull(1,java.sql.Types.INTEGER);
+            prep.setString(2, username);
+            prep.executeUpdate();
+            prep = myConn.prepareStatement("update student set application_pending=? where student_username=?");
+            prep.setBoolean(1, false);
+            prep.setString(2, username);
             prep.executeUpdate();
             System.out.println("user "+ username+" is denied ");
             return true;

@@ -71,7 +71,7 @@ public class ApproveDeny extends Application {
         // continue
         Button approveStu = new Button("APPROVE");
         approveStu.setOnAction(e -> {
-            Driver.approveStudent(students.get(index).getName());
+            Driver.approveStudent(students.get(index).getUser());
             studentApp.setText("");
             students.remove(index);
             if (index > students.size() - 1)
@@ -81,7 +81,7 @@ public class ApproveDeny extends Application {
 
         Button denyStu = new Button("DENY");
         denyStu.setOnAction(e -> {
-            Driver.denyStudent(students.get(index).getName(), students.get(index).getResID());
+            Driver.denyStudent(students.get(index).getUser(), students.get(index).getResID());
             studentApp.setText("");
             students.remove(index);
             if (index > students.size() - 1)
