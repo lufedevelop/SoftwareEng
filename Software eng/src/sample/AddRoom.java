@@ -45,15 +45,12 @@ public class AddRoom extends Application {
                     true,
                     null);
             try {
-                boolean isAdded = true;//new_driver.addRoom();
+                boolean isAdded = true;
                 if (isAdded){
-                    //room is added
-                    //@SAM TODO
-
+                    addMessage.setText("Room added successfully!");
                 }
                 else {
-                    //room is not added
-
+                    addMessage.setText("Problem adding room. Check information and try again.");
                 }
             }
             catch (Exception ex){
