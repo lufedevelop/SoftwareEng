@@ -24,6 +24,7 @@ CREATE TABLE student (
     student_name		  VARCHAR(255) NOT NULL,
     year_num			    INTEGER NOT NULL,
     residence_ID		  INTEGER,
+    application_pending		BOOLEAN,
     PRIMARY KEY (student_username),
     FOREIGN KEY (residence_ID) REFERENCES residence (residence_ID)
 		ON UPDATE CASCADE ON DELETE SET NULL
@@ -39,36 +40,37 @@ CREATE TABLE manager (
     );
 
 //insert values students into the table
-INSERT INTO student VALUES ('lfederle', 'password', 'lfederle@lakeheadu.ca', 'Lukas Federle', 3 , NULL);
-INSERT INTO student VALUES ('jmwillia', 'joseph', 'jmwillia@lakeheadu.ca', 'Joseph Williams', 4 , NULL);
-INSERT INTO student VALUES ('paramsey', 'doglover2', 'paramsey@lakeheadu.ca', 'Paul Ramsey', 4 , NULL);
-INSERT INTO student VALUES ('antburke', 'Up@efVf', 'antburke@lakeheadu.ca', 'Antonio Burke', 3 , NULL);
-INSERT INTO student VALUES ('stejones', 'anej772', 'stejones@lakeheadu.ca', 'Stuart Jones', 5 , NULL);
-INSERT INTO student VALUES ('mpawadis', '37pawMK4', 'mpawadis@lakeheadu.ca', 'Mark Pawadis', 3 , NULL);
-INSERT INTO student VALUES ('jasxnlui', 'soccer98', 'jasxnlui@lakeheadu.ca', 'Jason Lui', 5 , NULL);
-INSERT INTO student VALUES ('pelechoi', 'sunriseJX', 'pelechoi@lakeheadu.ca', 'Pearce Choi', 1 , NULL);
-INSERT INTO student VALUES ('vicayers', '99nitro39', 'vicayers@lakeheadu.ca', 'Victor Ayers', 1 , NULL);
-INSERT INTO student VALUES ('kmcguire', 'bestnail85', 'kmcguire@lakeheadu.ca', 'Kyle Mcguire', 2 , NULL);
-INSERT INTO student VALUES ('stjakhan', '=ancyLine49', 'stjakhan@lakeheadu.ca', 'Sterling Khan', 1 , NULL);
-INSERT INTO student VALUES ('amadhali', 'lo1ngsign3', 'amadhali@lakeheadu.ca', 'Ahmed Ali', 2 , NULL);
-INSERT INTO student VALUES ('sastephe', 'd@rkPanda95', 'sastephe@lakeheadu.ca', 'Sal Stephens', 2 , NULL);
-INSERT INTO student VALUES ('byburnet', 'oldJ@guar56', 'byburnet@lakeheadu.ca', 'Bruno Burnett', 1 , NULL);
-INSERT INTO student VALUES ('cmdpitts', 'wildLl@ma24', 'cmdpitts@lakeheadu.ca', 'Christopher Pitts', 2 , NULL);
-INSERT INTO student VALUES ('lataimer', 'kin)Wing60', 'lataimer@lakeheadu.ca', 'Lauren Aimer', 5 , NULL);
-INSERT INTO student VALUES ('erjacobs', 'pass', 'erjacobs@lakeheadu.ca', 'Emily Jacobs', 3 , NULL);
-INSERT INTO student VALUES ('altlrios', 'annerios1', 'altlrios@lakeheadu.ca', 'Anne Rios', 4 , NULL);
-INSERT INTO student VALUES ('cjbolton', '20bolt01', 'cjbolton@lakeheadu.ca', 'Cecile Bolton', 3 , NULL);
-INSERT INTO student VALUES ('sajcorte', 'fifCZ8', 'sajcorte@lakeheadu.ca', 'Sue Cortez', 3 , NULL);
-INSERT INTO student VALUES ('jastyork', 'badPar<59', 'jastyork@lakeheadu.ca', 'Jasmine York', 3 , NULL);
-INSERT INTO student VALUES ('marleiyu', 'clxxd3shn', 'marleiyu@lakeheadu.ca', 'Marie Yu', 4 , NULL);
-INSERT INTO student VALUES ('karpears', 'fntcpe1', 'karpears@lakeheadu.ca', 'Kayla Pearson', 4 , NULL);
-INSERT INTO student VALUES ('mglfishe', 'be$tFish', 'mglfishe@lakeheadu.ca', 'Megean Fisher', 2 , NULL);
-INSERT INTO student VALUES ('hzcallah', 'hcally03', 'hzcallah@lakeheadu.ca', 'Hazel Callahan', 1 , NULL);
-INSERT INTO student VALUES ('llymchen', 'lillflow1', 'llymchen@lakeheadu.ca', 'Lily Chen', 2 , NULL);
-INSERT INTO student VALUES ('vwsavery', '11viv@', 'vwsavery@lakeheadu.ca', 'Vivian Avery', 1, NULL);
-INSERT INTO student VALUES ('fpcarter', 'dar<S', 'fpcarter@lakeheadu.ca', 'Faith Carter', 1 , NULL);
-INSERT INTO student VALUES ('erbyoung', 'yyed83s', 'erbyoung@lakeheadu.ca', 'Erin Young', 1 , NULL);
-INSERT INTO student VALUES ('clxlsims', '>simbi20', 'clxlsims@lakeheadu.ca', 'Caitlyn Sims', 2 , NULL);
+INSERT INTO student VALUES ('lfederle', 'password', 'lfederle@lakeheadu.ca', 'Lukas Federle', 3 , NULL, 0);
+INSERT INTO student VALUES ('jmwillia', 'joseph', 'jmwillia@lakeheadu.ca', 'Joseph Williams', 4 , NULL, 0);
+INSERT INTO student VALUES ('paramsey', 'doglover2', 'paramsey@lakeheadu.ca', 'Paul Ramsey', 4 , NULL, 0);
+INSERT INTO student VALUES ('antburke', 'Up@efVf', 'antburke@lakeheadu.ca', 'Antonio Burke', 3 , NULL, 0);
+INSERT INTO student VALUES ('stejones', 'anej772', 'stejones@lakeheadu.ca', 'Stuart Jones', 5 , NULL, 0);
+INSERT INTO student VALUES ('mpawadis', '37pawMK4', 'mpawadis@lakeheadu.ca', 'Mark Pawadis', 3 , NULL, 0);
+INSERT INTO student VALUES ('jasxnlui', 'soccer98', 'jasxnlui@lakeheadu.ca', 'Jason Lui', 5 , NULL, 0);
+INSERT INTO student VALUES ('pelechoi', 'sunriseJX', 'pelechoi@lakeheadu.ca', 'Pearce Choi', 1 , NULL, 0);
+INSERT INTO student VALUES ('vicayers', '99nitro39', 'vicayers@lakeheadu.ca', 'Victor Ayers', 1 , NULL, 0);
+INSERT INTO student VALUES ('kmcguire', 'bestnail85', 'kmcguire@lakeheadu.ca', 'Kyle Mcguire', 2 , NULL, 0);
+INSERT INTO student VALUES ('stjakhan', '=ancyLine49', 'stjakhan@lakeheadu.ca', 'Sterling Khan', 1 , NULL, 0);
+INSERT INTO student VALUES ('amadhali', 'lo1ngsign3', 'amadhali@lakeheadu.ca', 'Ahmed Ali', 2 , NULL, 0);
+INSERT INTO student VALUES ('sastephe', 'd@rkPanda95', 'sastephe@lakeheadu.ca', 'Sal Stephens', 2 , NULL, 0);
+INSERT INTO student VALUES ('byburnet', 'oldJ@guar56', 'byburnet@lakeheadu.ca', 'Bruno Burnett', 1 , NULL, 0);
+INSERT INTO student VALUES ('cmdpitts', 'wildLl@ma24', 'cmdpitts@lakeheadu.ca', 'Christopher Pitts', 2 , NULL, 0);
+INSERT INTO student VALUES ('lataimer', 'kin)Wing60', 'lataimer@lakeheadu.ca', 'Lauren Aimer', 5 , NULL, 0);
+INSERT INTO student VALUES ('erjacobs', 'pass', 'erjacobs@lakeheadu.ca', 'Emily Jacobs', 3 , NULL, 0);
+INSERT INTO student VALUES ('altlrios', 'annerios1', 'altlrios@lakeheadu.ca', 'Anne Rios', 4 , NULL, 0);
+INSERT INTO student VALUES ('cjbolton', '20bolt01', 'cjbolton@lakeheadu.ca', 'Cecile Bolton', 3 , NULL, 0);
+INSERT INTO student VALUES ('sajcorte', 'fifCZ8', 'sajcorte@lakeheadu.ca', 'Sue Cortez', 3 , NULL, 0);
+INSERT INTO student VALUES ('jastyork', 'badPar<59', 'jastyork@lakeheadu.ca', 'Jasmine York', 3 , NULL, 0);
+INSERT INTO student VALUES ('marleiyu', 'clxxd3shn', 'marleiyu@lakeheadu.ca', 'Marie Yu', 4 , NULL, 0);
+INSERT INTO student VALUES ('karpears', 'fntcpe1', 'karpears@lakeheadu.ca', 'Kayla Pearson', 4 , NULL, 0);
+INSERT INTO student VALUES ('mglfishe', 'be$tFish', 'mglfishe@lakeheadu.ca', 'Megean Fisher', 2 , NULL, 0);
+INSERT INTO student VALUES ('hzcallah', 'hcally03', 'hzcallah@lakeheadu.ca', 'Hazel Callahan', 1 , NULL, 0);
+INSERT INTO student VALUES ('llymchen', 'lillflow1', 'llymchen@lakeheadu.ca', 'Lily Chen', 2 , NULL, 0);
+INSERT INTO student VALUES ('vwsavery', '11viv@', 'vwsavery@lakeheadu.ca', 'Vivian Avery', 1, NULL, 0);
+INSERT INTO student VALUES ('fpcarter', 'dar<S', 'fpcarter@lakeheadu.ca', 'Faith Carter', 1 , NULL, 0);
+INSERT INTO student VALUES ('erbyoung', 'yyed83s', 'erbyoung@lakeheadu.ca', 'Erin Young', 1 , NULL, 0);
+INSERT INTO student VALUES ('clxlsims', '>simbi20', 'clxlsims@lakeheadu.ca', 'Caitlyn Sims', 2 , NULL, 0);
+
 
 //insert managers into the table
 INSERT INTO manager VALUES ('manlfede', 'FEDmanager3', 'lukas.federle@gmail.com', 'Lukas Federle');
