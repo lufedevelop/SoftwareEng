@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
@@ -23,17 +24,72 @@ public class AddRoom extends Application {
 
         Label addSpec = new Label("Enter New Room ID:");
         TextField addIDInput = new TextField();
+        Label livingStyleLab = new Label("Select Living Style: ");
+        ComboBox cbLivingStyle = new ComboBox();
+        cbLivingStyle.getItems().addAll(
+                "Residence Hall",
+                "Townhouse",
+                "Apartment"
+        );
+        Label roomTypeLab = new Label("Select Room Type: ");
+        ComboBox cbRoomType = new ComboBox();
+        cbRoomType.getItems().addAll(
+                "Basic Single",
+                "Single",
+                "Double"
+        );
+
+
         Label addMessage = new Label("");
+        // we also need int residence_ID, String living_style, String room_type,
+        //                                  int residence_price,String residence_address,
+        //                                  boolean has_mealplan, String student_usernames
         // set on action
+        // if new room ID matches another existing room ID
+        // addMessage = "Room already exists!" -- red text
+        // if ID input is NULL
+        // addMessage = "please enter an ID to assign to room!"
+        // else
+        // addMessage = "Room successfully added" -- green text
         Button addRoom = new Button("ADD ROOM");
         addRoom.setOnAction(e -> {
             Integer addId = Integer.parseInt(addIDInput.getText());
+            String livingStyle = cbLivingStyle.getValue().toString();
+            String roomType = cbRoomType.getValue().toString();
+            Boolean hasMealplan = false;
+            int price = 8000;
+            String address = "";
+
+            if (livingStyle == "Residence Hall") {
+                address = "Bartley Residence Bartley Cir";
+                hasMealplan = true;
+                if (roomType == "Basic Single") {
+                    price = 11196;
+                }
+                else if (roomType == "Single") {
+                    price = 12395;
+                }
+                else {
+                    price = 10235;
+                }
+            }
+            else if (livingStyle == "Townhouse") {
+                address = "Deer Lake Rd";
+                price = 7982;
+            }
+            else if (livingStyle == "Apartment") {
+                address = "North Spirit Rd";
+                price = 7571;
+            }
+
+            System.out.println("ID: " + addId + "\nLiving Style: " + livingStyle + "\nroomType: " + roomType + "\nprice: " + price + "\naddress: " + address + "\nMealplan: " + hasMealplan);
+
             Utils.driver.addRoom(addId,
-                    "Residence Hall",
-                    "Basic Single",
-                    11196,
-                    "Bartley Residence Bartley Cir",
-                    true,
+                    livingStyle,
+                    roomType,
+                    price,
+                    address,
+                    hasMealplan,
                     null);
             try {
                 boolean isAdded = true;
@@ -55,6 +111,13 @@ public class AddRoom extends Application {
         Label subMessage = new Label("");
 
         // set on action
+        // if input is NULL or incorrect
+        // subMessage = "Wrong or Missing Room ID!" -- red text
+        // if room is occupied
+        // subMessage = "Room cannot be removed until it is empty!" -- red text
+        // else
+        // subMessage = "Room successfully removed" -- green text
+
         Button subRoom = new Button("REMOVE ROOM");
         subRoom.setOnAction(e -> {
             int removeId = Integer.parseInt(subIDInput.getText());
@@ -82,7 +145,7 @@ public class AddRoom extends Application {
             }
         });
 
-        modPermissions.getChildren().addAll(addServ, addSpec, addIDInput, addMessage, addRoom, subServ, subSpec, subIDInput, subMessage, subRoom, goBackButton);
+        modPermissions.getChildren().addAll(addServ, addSpec, addIDInput, livingStyleLab, cbLivingStyle, roomTypeLab, cbRoomType, addMessage, addRoom, subServ, subSpec, subIDInput, subMessage, subRoom, goBackButton);
         modPermissions.setSpacing(15);
 
         FlowPane modHub = new FlowPane();
